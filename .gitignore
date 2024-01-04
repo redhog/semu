@@ -8,3 +8,5 @@ semu
 Image
 ext4.img
 rootfs.cpio
+\#*
+*~
