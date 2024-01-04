@@ -77,7 +77,7 @@ void capture_keyboard_input();
 
 /* virtio-net */
 
-#if SEMU_HAS(VIRTIONET)
+#if SEMU_FEATURE_VIRTIONET
 #define IRQ_VNET 2
 #define IRQ_VNET_BIT (1 << IRQ_VNET)
 
@@ -122,11 +122,11 @@ void virtio_net_write(vm_t *core,
 void virtio_net_refresh_queue(virtio_net_state_t *vnet);
 
 bool virtio_net_init(virtio_net_state_t *vnet);
-#endif /* SEMU_HAS(VIRTIONET) */
+#endif /* SEMU_FEATURE_VIRTIONET */
 
 /* VirtIO-Block */
 
-#if SEMU_HAS(VIRTIOBLK)
+#if SEMU_FEATURE_VIRTIOBLK
 
 #define IRQ_VBLK 3
 #define IRQ_VBLK_BIT (1 << IRQ_VBLK)
@@ -171,7 +171,7 @@ void virtio_blk_write(vm_t *vm,
                       uint32_t value);
 
 uint32_t *virtio_blk_init(virtio_blk_state_t *vblk, char *disk_file);
-#endif /* SEMU_HAS(VIRTIOBLK) */
+#endif /* SEMU_FEATURE_VIRTIOBLK */
 
 /* memory mapping */
 
@@ -181,10 +181,10 @@ typedef struct {
     uint32_t *disk;
     plic_state_t plic;
     u8250_state_t uart;
-#if SEMU_HAS(VIRTIONET)
+#if SEMU_FEATURE_VIRTIONET
     virtio_net_state_t vnet;
 #endif
-#if SEMU_HAS(VIRTIOBLK)
+#if SEMU_FEATURE_VIRTIOBLK
     virtio_blk_state_t vblk;
 #endif
     uint32_t timer_lo, timer_hi;

@@ -46,7 +46,7 @@ static void emu_update_uart_interrupts(vm_t *vm)
     plic_update_interrupts(vm, &data->plic);
 }
 
-#if SEMU_HAS(VIRTIONET)
+#if SEMU_FEATURE_VIRTIONET
 static void emu_update_vnet_interrupts(vm_t *vm)
 {
     emu_state_t *data = (emu_state_t *) vm->priv;
@@ -58,7 +58,7 @@ static void emu_update_vnet_interrupts(vm_t *vm)
 }
 #endif
 
-#if SEMU_HAS(VIRTIOBLK)
+#if SEMU_FEATURE_VIRTIOBLK
 static void emu_update_vblk_interrupts(vm_t *vm)
 {
     emu_state_t *data = (emu_state_t *) vm->priv;
@@ -92,13 +92,13 @@ static void mem_load(vm_t *vm, uint32_t addr, uint8_t width, uint32_t *value)
             u8250_read(vm, &data->uart, addr & 0xFFFFF, width, value);
             emu_update_uart_interrupts(vm);
             return;
-#if SEMU_HAS(VIRTIONET)
+#if SEMU_FEATURE_VIRTIONET
         case 0x41: /* virtio-net */
             virtio_net_read(vm, &data->vnet, addr & 0xFFFFF, width, value);
             emu_update_vnet_interrupts(vm);
             return;
 #endif
-#if SEMU_HAS(VIRTIOBLK)
+#if SEMU_FEATURE_VIRTIOBLK
         case 0x42: /* virtio-blk */
             virtio_blk_read(vm, &data->vblk, addr & 0xFFFFF, width, value);
             emu_update_vblk_interrupts(vm);
@@ -131,13 +131,13 @@ static void mem_store(vm_t *vm, uint32_t addr, uint8_t width, uint32_t value)
             u8250_write(vm, &data->uart, addr & 0xFFFFF, width, value);
             emu_update_uart_interrupts(vm);
             return;
-#if SEMU_HAS(VIRTIONET)
+#if SEMU_FEATURE_VIRTIONET
         case 0x41: /* virtio-net */
             virtio_net_write(vm, &data->vnet, addr & 0xFFFFF, width, value);
             emu_update_vnet_interrupts(vm);
             return;
 #endif
-#if SEMU_HAS(VIRTIOBLK)
+#if SEMU_FEATURE_VIRTIOBLK
         case 0x42: /* virtio-blk */
             virtio_blk_write(vm, &data->vblk, addr & 0xFFFFF, width, value);
             emu_update_vblk_interrupts(vm);
@@ -413,12 +413,12 @@ static int semu_start(int argc, char **argv)
     /* Set up peripherals */
     emu.uart.in_fd = 0, emu.uart.out_fd = 1;
     capture_keyboard_input(); /* set up uart */
-#if SEMU_HAS(VIRTIONET)
+#if SEMU_FEATURE_VIRTIONET
     if (!virtio_net_init(&(emu.vnet)))
         fprintf(stderr, "No virtio-net functioned\n");
     emu.vnet.ram = emu.ram;
 #endif
-#if SEMU_HAS(VIRTIOBLK)
+#if SEMU_FEATURE_VIRTIOBLK
     emu.vblk.ram = emu.ram;
     emu.disk = virtio_blk_init(&(emu.vblk), disk_file);
 #endif
@@ -433,13 +433,13 @@ static int semu_start(int argc, char **argv)
             if (emu.uart.in_ready)
                 emu_update_uart_interrupts(&vm);
 
-#if SEMU_HAS(VIRTIONET)
+#if SEMU_FEATURE_VIRTIONET
             virtio_net_refresh_queue(&emu.vnet);
             if (emu.vnet.InterruptStatus)
                 emu_update_vnet_interrupts(&vm);
 #endif
 
-#if SEMU_HAS(VIRTIOBLK)
+#if SEMU_FEATURE_VIRTIOBLK
             if (emu.vblk.InterruptStatus)
                 emu_update_vblk_interrupts(&vm);
 #endif
