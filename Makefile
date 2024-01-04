@@ -45,6 +45,7 @@ OBJS := \
 	plic.o \
 	uart.o \
 	main.o \
+	utils.o \
 	$(OBJS_EXTRA)
 
 deps := $(OBJS:%.o=.%.o.d)
