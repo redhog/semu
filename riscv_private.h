@@ -1,4 +1,6 @@
-#pragma once
+#ifdef RISCV_PRIVATE
+#else
+#define RISCV_PRIVATE
 
 /* base RISC-V ISA */
 enum {
@@ -108,3 +110,5 @@ enum {
 
 #define SBI_EID_RST 0x53525354
 #define SBI_RST__SYSTEM_RESET 0
+
+#endif
