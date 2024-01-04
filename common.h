@@ -1,4 +1,6 @@
-#pragma once
+#ifdef COMMON_H
+#else
+#define COMMON_H
 
 #include "feature.h"
 
@@ -25,3 +27,7 @@ static inline int ilog2(int x)
  */
 #define RANGE_CHECK(x, minx, size) \
     ((int32_t) ((x - minx) | (minx + size - 1 - x)) >= 0)
+
+typedef unsigned int uint32_t
+
+#endif

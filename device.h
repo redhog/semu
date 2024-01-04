@@ -1,4 +1,6 @@
-#pragma once
+#ifdef DEVICE_H
+#else
+#define DEVICE_H
 
 #include "riscv.h"
 #include "virtio.h"
@@ -187,3 +189,5 @@ typedef struct {
 #endif
     uint32_t timer_lo, timer_hi;
 } emu_state_t;
+
+#endif

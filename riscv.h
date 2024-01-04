@@ -1,7 +1,10 @@
-#pragma once
+#ifdef RISCV_H
+#else
+#define RISCV_H
 
 #include <stdbool.h>
 #include <stdint.h>
+#include "common.h"
 
 /* ERR_EXCEPTION indicates that the instruction has raised one of the
  * exceptions defined in the specification. If this flag is set, the
@@ -26,7 +29,7 @@
 typedef enum {
     ERR_NONE,
     ERR_EXCEPTION, /**< RISC-V exception was raised (see additional fields) */
-    ERR_USER,      /**< user-specific error */
+    ERR_USER       /**< user-specific error */
 } vm_error_t;
 
 /* To use the emulator, start by initializing a "vm_t" struct with zero values
@@ -130,3 +133,5 @@ void vm_trap(vm_t *vm);
 
 /* Return a readable description for a RISC-V exception cause */
 void vm_error_report(const vm_t *vm);
+
+#endif

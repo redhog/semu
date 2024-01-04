@@ -1,4 +1,6 @@
-#pragma once
+#ifdef VIRTIO_H
+#else
+#define VIRTIO_H
 
 #define VIRTIO_VENDOR_ID 0x12345678
 
@@ -63,3 +65,5 @@ struct virtq_desc {
     uint16_t flags;
     uint16_t next;
 };
+
+#endif
